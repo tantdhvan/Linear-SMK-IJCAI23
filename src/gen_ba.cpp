@@ -22,7 +22,6 @@ int main(int argc, char** argv) {
    tinyGraph g;
    g.barabasi_albert( n, m, m );
 
-   //g.write_bin( argv[3] );
    g.write_edge_list( argv[3] );
 
    return 0;

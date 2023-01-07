@@ -40,8 +40,6 @@ public:
   }
 };
 
-//////
-
 MinHeap::MinHeap(uint32_t* array, size_t length) : _vector(length), _vindex(length), _vloc( length )
 {
   for(size_t i = 0; i < length; ++i)
@@ -70,10 +68,6 @@ MinHeap::MinHeap()
 {
 }
 
-/*
- * Create empty heap, but
- * with _vloc tracking node positions
- */
 MinHeap::MinHeap( size_t nNodes ) {
   _vloc.assign( nNodes, -1 );
 }
@@ -86,7 +80,6 @@ void MinHeap::DecreaseValue( int loc,
     //  }
 
 }
-			    
 
 size_t MinHeap::size() {
   return _vector.size();
@@ -148,17 +141,11 @@ void MinHeap::BubbleUp(int index)
     }
 }
 
-/*
- * 
- */
 void MinHeap::Insert(uint32_t node, uint32_t newValue)
 {
   if (_vloc[ node ] != -1) {
-    //node's distance is already in queue
     DecreaseValue( node, newValue );
   } else {
-    //This node is being rediscovered after it was previously extracted
-    //Need to add it back in
     _vector.push_back( newValue );
     _vindex.push_back( node );
     _vloc[ node ] = _vector.size() - 1;
@@ -177,7 +164,6 @@ uint32_t MinHeap::extractNode() {
   DeleteMin();
   return r;
 }
-
 
 void MinHeap::DeleteMin()
 {
@@ -201,6 +187,4 @@ void MinHeap::DeleteMin()
 
   BubbleDown(0);
 }
-
-
 #endif

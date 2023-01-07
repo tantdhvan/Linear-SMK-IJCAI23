@@ -140,15 +140,11 @@ class Alg3
    random_device rd;
    mt19937 gen;
    Args &myArgs;
-   size_t k;
+   size_t k, nEvals = 0;
    tinyGraph &g;
-   size_t nEvals = 0;
-   double epsi;
-   double B;
+   double epsi, B, tau, theta;
    vector<myWeight> A;
-   double tau, theta;
-   vector<vector<double>> F_X; // lưu hàm f đã được tính
-   vector<vector<double>> F_Y; // lưu hàm f đã được tính
+   vector<vector<double>> F_X, F_Y;
 public:
    Alg3(Args &args) : gen(rd()), myArgs(args), g(args.g)
    {
@@ -159,16 +155,9 @@ public:
    double alg1()
    {
       uniform_real_distribution<double> dist(0.0, 1.0);
-      double p = sqrt(2) - 1;
-      double alpha = sqrt(2 + sqrt(2));
-      double cost = 0;
-      double solVal = 0;
+      double p = sqrt(2) - 1, alpha = sqrt(2 + sqrt(2)), cost = 0, solVal = 0, B2 = B / 2, Emax = 0, current_f = 0;
       vector<node_id> S;
-      double B2 = B / 2;
-      double Emax = 0;
-      double current_f = 0;
       vector<double> V1;
-      // khởi tạo
       for (node_id u = 0; u < g.n; u++)
       {
          vector<node_id> tmp;
@@ -184,7 +173,7 @@ public:
          A.push_back(a);
          F_X[0][u] = tmp_f;
          F_Y[0][u] = tmp_f;
-         if (tmp_f > Emax) // tìm Emax
+         if (tmp_f > Emax)
             Emax = tmp_f;
       }
       vector<node_id> VP;
@@ -194,9 +183,7 @@ public:
             continue;
          double rand = dist(gen);
          if (rand >= p)
-         {
             VP.push_back(i);
-         }
       }
       for (int i = 0; i < VP.size(); i++)
       {
@@ -219,7 +206,7 @@ public:
    void run()
    {
       nEvals = 0;
-      double e2 = epsi / 20, solVal = 0;
+      double e2 = epsi / 20.0, solVal = 0;
       for (node_id u = 0; u < g.n; u++)
       {
          vector<double> tmpf(g.n, -1.0);
@@ -248,7 +235,6 @@ public:
                break;
             if (A[index1].w[1] < theta)
                break;
-
             node_id e = A[index1].u;
             if (cost_x + g.adjList[e].wht > B && cost_y + g.adjList[e].wht > B)
             {
@@ -457,7 +443,7 @@ public:
    size_t run()
    {
       uniform_real_distribution<double> dist(0.0, 1.0);
-      double solVal = 0, epsi2 = epsi / 5, delta;
+      double solVal = 0, epsi2 = epsi / 10, delta;
       nEvals = 0;
       for (node_id u = 0; u < g.n; u++)
       {
@@ -466,10 +452,9 @@ public:
       }
       tau = alg2();
       solVal = tau;
-      int j = 0;
       theta = 16.037 * tau / (4 * epsi2 * B);
-      double nguong = (tau * (1 - epsi2)) / (10 * B), tmp_f = 0;
-      while (theta > nguong)
+      double nguong = (tau * (1 - epsi2)) / (4 * B), tmp_f = 0;
+      while (theta >= nguong)
       {
          while (true)
          {
@@ -477,16 +462,12 @@ public:
             int index1 = -1;
             for (int i = 0; i < A.size(); i++)
             {
-               if (A[i].check == false)
-                  continue;
+               if (A[i].check == false) continue;
                index1 = i;
                break;
             }
-            if (index1 == -1)
-               break;
-            if (A[index1].w[1] < theta)
-               break;
-
+            if (index1 == -1) break;
+            if (A[index1].w[1] < theta) break;
             node_id e = A[index1].u;
             if (cost + g.adjList[e].wht > B || g.adjList[e].wht > (1 - epsi2) * B)
             {

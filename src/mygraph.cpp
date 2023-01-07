@@ -566,7 +566,7 @@ namespace mygraph
 		 * Replaces graph with undirected, unweighted ER graph with n nodes
 		 * edge prob p
 		 */
-		void erdos_renyi_undirected(node_id n, double p)//sinh ngẫu nhiên tập cạnh với n đỉnh và tỉ lệ p (ER)
+		void erdos_renyi_undirected(node_id n, double p)
 		{
 			adjList.clear();
 			this->n = n;

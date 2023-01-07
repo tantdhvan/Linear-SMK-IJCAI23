@@ -20,7 +20,7 @@ int main(int argc, char** argv) {
    double p = stod( arg2 );
    
    tinyGraph g;
-   g.erdos_renyi_undirected( n, p );
+   g.erdos_renyi_undirected(n, p );
 
    g.write_edge_list( argv[3] );
 

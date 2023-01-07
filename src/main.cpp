@@ -42,7 +42,7 @@ Algs string_to_alg(string sin)
       return SAMPLEGREEDY;
    if (sin == "FANTOM")
       return FANTOM;
-   return ALG1;
+   return Alg4;
 }
 
 void parseArgs(int argc, char **argv, Args &arg)
@@ -231,14 +231,10 @@ void runAlg(Args &args)
       {
          size_t nreps = N / args.nThreads;
          if (i == args.nThreads - 1)
-         {
             nreps = N - tot_reps;
-         }
 
          if (args.g == thread_args[i].g)
-         {
             cout << "graphs are equal" << endl;
-         }
          else
          {
             cout << "graphs are not equal" << endl;

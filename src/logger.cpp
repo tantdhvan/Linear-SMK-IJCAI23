@@ -4,7 +4,6 @@
 #include <string>
 #include <ctime>
 #include <iostream>
-//#include "util.cpp"
 using namespace std;
 
 enum LogType { ERROR = -3, WARN = -2, OUTPUT = -1, INFO = 0, DEBUG = 1, TRACE = 2 };
@@ -19,8 +18,6 @@ public:
   char buff[70];
    bool enabled;
   Logger() : of (cout) {
-    //    of.open("log.txt");
-    //    of = cout;
     loglevel = INFO;
     msglevel = INFO;
     echo = false;
@@ -28,8 +25,6 @@ public:
   }
   
    Logger( LogType inlevel, ostream& os, bool echo_in = false ): of( os ) {
-    //of.open("log.txt");
-    //    of = cout;
       loglevel = inlevel;
       msglevel = INFO;
       echo = echo_in;
@@ -96,7 +91,6 @@ public:
   }
 
   ~Logger() {
-    //of.close();
   }
 };
 
