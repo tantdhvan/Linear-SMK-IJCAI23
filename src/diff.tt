@@ -1,0 +1,281 @@
+26,27d25
+< vector< size_t > emptySizetVector;
+< 
+139c137,138
+< 
+---
+>    double tmpDouble = 0;
+>    
+214c213
+< 	 
+---
+> 
+222c221
+< 	 bool weighted; 
+---
+> 	 bool weighted = false;
+223a223,224
+> 	    ss.clear();
+> 	    ss.str( sline );
+225,227d225
+< 	       ss.clear();
+< 	       ss.str( sline );
+< 
+229,231c227,235
+< 		  ss >> this->n; //Value is currently ignored
+< 		  ss >> weighted;
+< 		  if (weighted) {
+---
+> 		  //process first line.
+> 		  //determine if edge list is weighted or not
+> 		  vector< unsigned > vtmp;
+> 		  unsigned tmp;
+> 		  while (ss >> tmp) {
+> 		     vtmp.push_back(tmp);
+> 		  }
+> 		  if (vtmp.size() == 3) {
+> 		     weighted = true;
+233,234d236
+< 		     
+< 		     this->n = 0;
+237,238d238
+< 		     this->n = 0;
+< 		     //init_empty_graph();
+239a240,241
+> 		  ss.clear();
+> 		  ss.str( sline );
+241,254d242
+< 	       else {
+< 		  //have an edge on this line
+< 		  unsigned from,to; unsigned wht = 1;
+< 		  ss >> from;
+< 		  ss >> to;
+< 		  if (weighted)
+< 		     ss >> wht;
+< 		  simplifyNode* emptyNode;
+< 		  while (to >= this->n) {
+< 		     emptyNode = new simplifyNode;
+< 		     emptyNode->id = this->n;
+< 		     adjList.push_back( emptyNode );
+< 		     ++this->n;
+< 		  }
+256,263c244,257
+< 		  while (from >= this->n) {
+< 		     emptyNode = new simplifyNode;
+< 		     emptyNode->id = this->n;
+< 		     adjList.push_back( emptyNode );
+< 		     ++this->n;
+< 		  }
+< 
+< 		  add_edge( from, to, wht ); 
+---
+> 	       //have an edge on this line
+> 	       unsigned from,to; unsigned wht = 1;
+> 	       ss >> from;
+> 	       ss >> to;
+> 	       if (weighted)
+> 		  ss >> wht;
+> 
+> 	       simplifyNode* emptyNode;
+> 	       while (to >= this->n) {
+> 		  emptyNode = new simplifyNode;
+> 		  emptyNode->id = this->n;
+> 		  adjList.push_back( emptyNode );
+> 		  ++this->n;
+> 	       }
+264a259,263
+> 	       while (from >= this->n) {
+> 		  emptyNode = new simplifyNode;
+> 		  emptyNode->id = this->n;
+> 		  adjList.push_back( emptyNode );
+> 		  ++this->n;
+266a266,267
+> 	       add_edge( from, to, wht ); 
+> 
+268a270
+> 
+270a273
+>       
+273,274c276,277
+< 
+<       void read_csv( string fname ) {
+---
+>       
+>       void read_unweighted_edge_list( string fname ) {
+281c284
+< 	 bool weighted; 
+---
+> 
+287,298c290,300
+< 	       if (line_number == 0) {
+< 		  ss >> this->n; //Value is currently ignored
+< 		  ss >> weighted;
+< 		  if (weighted) {
+< 		     logg << "Graph is weighted." << endL;
+< 		     
+< 		     this->n = 0;
+< 		  } else {
+< 		     logg << "Graph is unweighted." << endL;
+< 		     this->n = 0;
+< 		     //init_empty_graph();
+< 		  }
+---
+> 	       //have an edge on this line
+> 	       unsigned from,to; unsigned wht = 1;
+> 	       ss >> from;
+> 	       ss >> to;
+> 
+> 	       simplifyNode* emptyNode;
+> 	       while (to >= this->n) {
+> 		  emptyNode = new simplifyNode;
+> 		  emptyNode->id = this->n;
+> 		  adjList.push_back( emptyNode );
+> 		  ++this->n;
+300,324d301
+< 	       else {
+< 		  //have an edge on this line
+< 		  unsigned from,to; unsigned wht = 1;
+< 		  char comma;
+< 		  ss >> from;
+< 		  ss >> comma;
+< 		  ss >> to;
+< 		  if (weighted)
+< 		     ss >> wht;
+< 		  simplifyNode* emptyNode;
+< 		  while (to >= this->n) {
+< 		     emptyNode = new simplifyNode;
+< 		     emptyNode->id = this->n;
+< 		     adjList.push_back( emptyNode );
+< 		     ++this->n;
+< 		  }
+< 
+< 		  while (from >= this->n) {
+< 		     emptyNode = new simplifyNode;
+< 		     emptyNode->id = this->n;
+< 		     adjList.push_back( emptyNode );
+< 		     ++this->n;
+< 		  }
+< 
+< 		  add_edge( from, to, wht ); 
+325a303,307
+> 	       while (from >= this->n) {
+> 		  emptyNode = new simplifyNode;
+> 		  emptyNode->id = this->n;
+> 		  adjList.push_back( emptyNode );
+> 		  ++this->n;
+328c310,311
+< 	       ++line_number;
+---
+> 	       add_edge( from, to, wht ); 
+> 
+329a313,314
+> 
+> 	    ++line_number;
+331a317
+>       
+334c320
+< 
+---
+>       
+544,561d529
+<       size_t coverAdjacent( node_id v, vector< bool >& covered, vector< size_t >& nodesAdded = emptySizetVector ) {
+< 	 size_t deg = 0;
+< 	 if (!covered[ v ]) {
+< 	    ++deg;
+< 	    nodesAdded.push_back( v );
+< 	    covered[v] = true;
+< 	 }
+< 	 for (size_t i =0; i < adjList[v].neis.size(); ++i) {
+< 	    node_id w = adjList[v].neis[i].getId();
+< 	    if (!(covered[w])){
+< 	       covered[w] = true;
+< 	       ++deg;
+< 	       nodesAdded.push_back( w );
+< 	    }
+< 	 }
+< 	 return deg;
+<       }
+<       
+910,911d877
+< 	 ifile << n << " 0 0" << endl;
+<       
+1179c1145,1151
+< 	 (data[ name ]).push_back( val );
+---
+> 	 if (data.find( name ) != data.end()) {
+> 	    (data[ name ]).push_back( val );
+> 	 } else {
+> 	    vector< double > tmp;
+> 	    data[ name ] = tmp;
+> 	    (data[ name ]).push_back( val );
+> 	 }
+1182,1186c1154,1183
+<       void print( string name ) {
+< 	 vector< double >& vals = data[ name ];
+< 	 double sum = 0.0;
+< 	 for (size_t i = 0; i < vals.size(); ++i) {
+< 	    sum += vals[i];
+---
+>       bool print( string name, ostream& os, bool printStdDev = true, double& Oldmean = tmpDouble ) {
+> 	 map< string, vector< double > >::iterator it = data.find( name );
+> 	 if (it != data.end()) {
+> 	    vector<double>& tmp = it->second;
+> 	    double mean = 0.0;
+> 	    for (size_t i = 0; i < tmp.size(); ++i) {
+> 	       mean += tmp[i];
+> 	    }
+> 	    
+> 	    
+> 	    mean = mean / tmp.size();
+> 
+> 	    os << mean << ' ';
+> 
+> 	    if (printStdDev) {
+> 	       double stdDev = 0.0;
+> 	       for (size_t i = 0; i < tmp.size(); ++i) {
+> 		  stdDev += (tmp[i]- mean)*(tmp[i]- mean);
+> 	       }
+> 	       if (tmp.size() > 1) {
+> 		  stdDev = stdDev / ( tmp.size() - 1 );
+> 		  stdDev = sqrt( stdDev );
+> 		  os << stdDev << ' ';
+> 	       } else {
+> 		  os << 0.0 << ' ';
+> 	       }
+> 	    }
+> 
+> 	    Oldmean = mean;
+> 	    return true;
+1188,1189c1185,1186
+< 	 
+< 	 cout << sum / vals.size(); 
+---
+> 
+> 	 return false;
+1199d1195
+<       	    os << setw(25);
+1201c1197
+< 	    os << to_string( index ) + it->first;
+---
+> 	    os << to_string( index ) + "_" + it->first << ' ';
+1204,1206c1200
+< 	       os << setw(25);
+< 
+< 	       os << to_string( index ) + it->first;
+---
+> 	       os << to_string( index ) + "_" + it->first << ' ';
+1210,1211d1203
+< 
+< 
+1223c1215
+< 	    os << setw(25) << mean ;
+---
+> 	    os << mean << ' ';
+1233c1225
+< 		  os << setw(25) << stdDev ;
+---
+> 		  os << stdDev << ' ';
+1235c1227
+< 		  os << setw(25) << 0.0 ;
+---
+> 		  os << 0.0 << ' ';
