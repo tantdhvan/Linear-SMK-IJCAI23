@@ -8,8 +8,7 @@ make.exe all --print-data-base --no-builtin-variables --no-builtin-rules --quest
 # There is NO WARRANTY, to the extent permitted by law.
  
 
- 
-# Make data base, printed on Sat Jan  7 10:50:30 2023
+# Make data base, printed on Sat Jan  7 12:46:11 2023
 
 # Variables
 
@@ -24,6 +23,7 @@ LOCALAPPDATA = C:\Users\PC\AppData\Local
 # environment
 VSCODE_CWD = C:\Users\PC\AppData\Local\Programs\Microsoft VS Code
 # environment
+ 
 SYSTEMROOT = C:\WINDOWS
 # environment
 PROCESSOR_LEVEL = 6
@@ -62,7 +62,6 @@ MAKEFLAGS = pqrR
 # environment
 ONEDRIVE = C:\Users\PC\OneDrive
 # makefile
- 
 CURDIR := /d/Source/Repos/tantdhvan/Linear SMK-IJCAI23/Linear-SMK-IJCAI23
 # environment
 APPLICATION_INSIGHTS_NO_DIAGNOSTIC_CHANNEL = 1
@@ -100,6 +99,7 @@ MAKE_HOST := x86_64-pc-msys
 PROGRAMDATA = C:\ProgramData
 # default
 SHELL := /bin/sh
+ 
 # environment
 HOMEPATH = \Users\PC
 # default
@@ -156,13 +156,13 @@ MAKE_VERSION := 4.3
 PROGRAMFILES(X86) = C:\Program Files (x86)
 # environment
 !D: = d:\Source\Repos\tantdhvan\Linear SMK-IJCAI23\Linear-SMK-IJCAI23
+ 
 # environment
 USERDOMAIN_ROAMINGPROFILE = DESKTOP-AQMTJRE
 # environment
 NUMBER_OF_PROCESSORS = 4
 # environment
 PUBLIC = C:\Users\Public
- 
 # environment
 APPDATA = C:\Users\PC\AppData\Roaming
 # environment
@@ -201,6 +201,7 @@ PROCESSOR_REVISION = 4501
 PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 69 Stepping 1, GenuineIntel
 # variable set hash-table stats:
 # Load=92/1024=9%, Rehash=0, Collisions=11/123=9%
+ 
 
 # Pattern-specific Variable Values
 
@@ -208,9 +209,9 @@ PROCESSOR_IDENTIFIER = Intel64 Family 6 Model 69 Stepping 1, GenuineIntel
 
 # Directories
 
-# . (device 2261361089, inode 281474976849565): 36 files, no impossibilities.
+# . (device 2261361089, inode 281474976849565): 9 files, no impossibilities.
 
-# 36 files, no impossibilities in 1 directories.
+# 9 files, no impossibilities in 1 directories.
 
 # Implicit Rules
 
@@ -228,8 +229,7 @@ revmax: src/main.cpp src/mygraph.cpp src/algs.cpp
 # Not a target:
 src/algs.cpp:
 #  Implicit rule search has been done.
- 
-#  Last modified 2022-12-21 00:53:56.7852129
+#  Last modified 2023-01-07 12:43:59.8303876
 #  File has been updated.
 #  Successfully updated.
 
@@ -246,13 +246,13 @@ preproc: src/preprocess.cpp src/mygraph.cpp
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 20):
 	g++ src/preprocess.cpp -o preproc  ${CPPFLAGS}
+ 
 
 revmax-debug: src/main.cpp src/mygraph.cpp src/algs.cpp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
 #  recipe to execute (from 'Makefile', line 18):
- 
 	g++-4.9 src/main.cpp -o revmax-debug -std=c++11 -Wall -Og -g  -DREVMAX_MON
 
 debug: src/main.cpp src/mygraph.cpp src/algs.cpp
@@ -264,34 +264,29 @@ debug: src/main.cpp src/mygraph.cpp src/algs.cpp
 
 # Not a target:
 Makefile:
- 
 #  Implicit rule search has been done.
-#  Last modified 2022-05-25 01:00:44
+#  Last modified 2023-01-07 12:46:08.4760879
 #  File has been updated.
 #  Successfully updated.
 
- 
 # Not a target:
 src/mygraph.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2022-12-18 17:14:07.371364
+#  Last modified 2023-01-07 12:04:07.4888714
 #  File has been updated.
 #  Successfully updated.
 
 ba: src/gen_ba.cpp src/mygraph.cpp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
- 
 #  File has not been updated.
- 
 #  recipe to execute (from 'Makefile', line 24):
- 
 	g++ -std=c++11 src/gen_ba.cpp -o ba
 
 # Not a target:
 src/main.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2022-12-16 22:05:03.5399481
+#  Last modified 2023-01-07 12:45:03.5619441
 #  File has been updated.
 #  Successfully updated.
 
@@ -299,6 +294,7 @@ clean:
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
+ 
 #  recipe to execute (from 'Makefile', line 26):
 	rm -f preproc
 	rm -f maxcov
@@ -307,7 +303,7 @@ clean:
 maxcut: src/main.cpp src/mygraph.cpp src/algs.cpp src/obj.cpp
 #  Implicit rule search has not been done.
 #  Implicit/static pattern stem: ''
-#  Last modified 2022-12-09 21:10:56
+#  File does not exist.
 #  File has been updated.
 #  Needs to be updated (-q is set).
 # automatic
@@ -323,13 +319,11 @@ maxcut: src/main.cpp src/mygraph.cpp src/algs.cpp src/obj.cpp
 # automatic
 # ^ := src/main.cpp src/mygraph.cpp src/algs.cpp src/obj.cpp
 # automatic
-# ? := src/main.cpp src/mygraph.cpp src/algs.cpp
+# ? := src/main.cpp src/mygraph.cpp src/algs.cpp src/obj.cpp
 # automatic
 # | := 
 # variable set hash-table stats:
- 
 # Load=8/32=25%, Rehash=0, Collisions=1/12=8%
- 
 #  recipe to execute (from 'Makefile', line 8):
 	g++ src/main.cpp -o maxcut  ${CPPFLAGS} -DMAXCUT
 
@@ -342,6 +336,7 @@ src/gen_ba.cpp:
 # Not a target:
 src/gen_er.cpp:
 #  Implicit rule search has not been done.
+ 
 #  Modification time never checked.
 #  File has not been updated.
 
@@ -354,12 +349,10 @@ src/gen_er.cpp:
 # Not a target:
 src/obj.cpp:
 #  Implicit rule search has been done.
-#  Last modified 2022-11-24 01:41:58.2626584
+#  Last modified 2023-01-07 12:45:08.6580443
 #  File has been updated.
 #  Successfully updated.
- 
 
- 
 all: maxcut revmax_nm preproc er ba
 #  Command line target.
 #  Implicit rule search has been done.
@@ -380,14 +373,12 @@ er: src/gen_er.cpp src/mygraph.cpp
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
- 
 #  recipe to execute (from 'Makefile', line 22):
- 
 	g++ -std=c++11 src/gen_er.cpp -o er
 
- 
 # Not a target:
 src/preprocess.cpp:
+ 
 #  Implicit rule search has not been done.
 #  Modification time never checked.
 #  File has not been updated.
@@ -420,12 +411,13 @@ maxcut_debug: src/main.cpp src/mygraph.cpp src/algs.cpp src/obj.cpp
 
 # No general ('VPATH' variable) search path.
 
-# strcache buffers: 1 (0) / strings = 56 / storage = 598 B / avg = 10 B
-# current buf: size = 8162 B / used = 598 B / count = 56 / avg = 10 B
+# strcache buffers: 1 (0) / strings = 32 / storage = 298 B / avg = 9 B
+# current buf: size = 8162 B / used = 298 B / count = 32 / avg = 9 B
 
-# strcache performance: lookups = 108 / hit rate = 48%
+# strcache performance: lookups = 81 / hit rate = 60%
 # hash-table stats:
-# Load=56/8192=1%, Rehash=0, Collisions=0/108=0%
-# Finished Make data base on Sat Jan  7 10:50:30 2023
+ 
+# Load=32/8192=0%, Rehash=0, Collisions=0/81=0%
+# Finished Make data base on Sat Jan  7 12:46:11 2023
 
  

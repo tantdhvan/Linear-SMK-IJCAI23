@@ -1,6 +1,5 @@
 #ifndef OBJ_CPP
 #define OBJ_CPP
-
 #include <omp.h>
 #include "mygraph.cpp"
 

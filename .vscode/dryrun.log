@@ -1,9 +1,13 @@
-make.exe --dry-run --always-make --keep-going --print-directory
+make.exe --dry-run --keep-going --print-directory
 make: Entering directory '/d/Source/Repos/tantdhvan/Linear SMK-IJCAI23/Linear-SMK-IJCAI23'
 g++ src/main.cpp -o maxcut  -std=c++11 -Wall -O2 -l pthread -DMAXCUT
+ 
 g++ src/main.cpp -o revmax_nm  -std=c++11 -Wall -O2 -l pthread -DREVMAX_NM
-g++ src/preprocess.cpp -o preproc  -std=c++11 -Wall -O2 -l pthread
+ 
+make: *** No rule to make target 'src/preprocess.cpp', needed by 'preproc'.
+
 g++ -std=c++11 src/gen_er.cpp -o er
+ 
 g++ -std=c++11 src/gen_ba.cpp -o ba
 make: Leaving directory '/d/Source/Repos/tantdhvan/Linear SMK-IJCAI23/Linear-SMK-IJCAI23'
  
