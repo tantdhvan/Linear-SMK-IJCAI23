@@ -28,22 +28,12 @@ void print_help()
 Algs string_to_alg(string sin)
 {
    transform(sin.begin(), sin.end(), sin.begin(), ::toupper);
-   if (sin == "ALG1")
-      return ALG1;
    if (sin == "ALG3")
       return ALG3;
-   if (sin == "ALG3ACC")
-      return ALG3ACC;
    if (sin == "ALG4")
       return ALG4;
-   if (sin == "ALG4ACC")
-      return ALG4ACC;
-   if (sin == "SMKDET")
-      return SMKDET;
    if (sin == "SMKDETACC")
       return SMKDETACC;
-   if (sin == "SMKRAN")
-      return SMKRAN;
    if (sin == "SMKRANACC")
       return SMKRANACC;
    if (sin == "SMKSTREAM")
@@ -161,73 +151,48 @@ void worker_run(Args &args, size_t N)
       std::chrono::steady_clock::time_point begin = std::chrono::steady_clock::now();
       switch (args.alg)
       {
-
-      case ALG3:
-      {
-         Alg3 alg3(args);
-         alg3.run();
-      }
-      break;
-      case ALG3ACC:
-      {
-         Alg3ACC Alg3acc(args);
-         Alg3acc.run();
-      }
-      break;
-      case ALG4:
-      {
-         Alg4 alg4(args);
-         alg4.run();
-      }
-      break;
-      case ALG4ACC:
-      {
-         Alg4Acc alg4acc(args);
-         alg4acc.run();
-      }
-      break;
-      case SMKDET:
-      {
-         SmkDet smkdet(args);
-         smkdet.run();
-      }
-      break;
-      case SMKDETACC:
-      {
-         SmkDetAcc smkdetacc(args);
-         smkdetacc.run();
-      }
-      break;
-      case SMKRAN:
-      {
-         SmkRan Smkran(args);
-         Smkran.run();
-      }
-      break;
-      case SMKRANACC:
-      {
-         SmkRanAcc Smkranacc(args);
-         Smkranacc.run();
-      }
-      break;
-      case SMKSTREAM:
-      {
-         SmkStream Smkstream(args);
-         Smkstream.run();
-      }
-      break;
-      case SAMPLEGREEDY:
-      {
-         SampleGreedy Samplegreedy(args);
-         Samplegreedy.run();
-      }
-      break;
-      case FANTOM:
-      {
-         Fantom fantom(args);
-         fantom.run();
-      }
-      break;
+         case ALG3:
+         {
+            Alg3 alg3(args);
+            alg3.run();
+         }
+         break;
+         case ALG4:
+         {
+            Alg4 alg4(args);
+            alg4.run();
+         }
+         break;
+         case SMKDETACC:
+         {
+            SmkDetAcc smkdetacc(args);
+            smkdetacc.run();
+         }
+         break;
+         case SMKRANACC:
+         {
+            SmkRanAcc Smkranacc(args);
+            Smkranacc.run();
+         }
+         break;
+         case SMKSTREAM:
+         {
+            SmkStream Smkstream(args);
+            Smkstream.run();
+         }
+         break;
+         case SAMPLEGREEDY:
+         {
+            SampleGreedy Samplegreedy(args);
+            Samplegreedy.run();
+         }
+         break;
+         case FANTOM:
+         {
+            Fantom fantom(args);
+            fantom.run();
+         }
+         break;
       }
 
       std::chrono::steady_clock::time_point end = std::chrono::steady_clock::now();

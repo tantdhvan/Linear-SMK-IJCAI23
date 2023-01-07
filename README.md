@@ -1,16 +1,9 @@
-## Linear-Time and Deterministic Algorithms for Cardinality-Constrained Non-Monotone Submodular Maximization
+## Linear Query Approximation Algorithms for Non-monotone Submodular Maximization under Knapsack Constraint
 
 The implementations of all algorithms evaluated in the paper,
-for both `revmax` and `maxcut` applications are in `src/algs.cpp`.
+for both `revmax`, `image` and `maxcut` applications are in `src/algs.cpp`.
 
 ### Dependencies
 - GNU `g++`, `make`
 - `python3` with `matplotlib` for plotting figures
-
-### Reproduce Experiments in Paper
-To reproduce all figures in the paper:
-```
-make single-pass
-```
-Results will be plotted in the `exp/figs` directory.
 
