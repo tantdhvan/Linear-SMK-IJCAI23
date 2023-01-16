@@ -155,9 +155,8 @@ public:
    double alg1()
    {
       uniform_real_distribution<double> dist(0.0, 1.0);
-      double p = sqrt(2) - 1, alpha = sqrt(2 + sqrt(2)), cost = 0, solVal = 0, B2 = B / 2, Emax = 0, current_f = 0;
-      vector<node_id> S;
-      vector<double> V1;
+      double cost_x = 0, cost_y, solVal = 0, B2 = B / 2, Emax = 0, current_fx = 0,current_fy = 0;
+      vector<node_id> X,Y;
       for (node_id u = 0; u < g.n; u++)
       {
          vector<node_id> tmp;
@@ -177,33 +176,79 @@ public:
             Emax = tmp_f;
       }
       vector<node_id> VP;
-      for (node_id i = 0; i < g.n; i++)
+      for (node_id e = 0; e < g.n; e++)
       {
-         if (g.adjList[i].wht > B2)
+         if (g.adjList[e].wht > B2)
             continue;
-         double rand = dist(gen);
-         if (rand >= p)
-            VP.push_back(i);
-      }
-      for (int i = 0; i < VP.size(); i++)
-      {
-         node_id e = VP[i];
-         if (cost + g.adjList[e].wht <= B && A[e].w[1] >= current_f / B)
+         bool flag_x = false;
+         bool flag_y = false;
+         X.push_back(e);
+         double tmp_fx = compute_valSet(nEvals, g, X);
+         X.pop_back();
+         if (((tmp_fx - current_fx) / g.adjList[e].wht) >= current_fx / B)
+            flag_x = true;
+         Y.push_back(e);
+         double tmp_fy = compute_valSet(nEvals, g, Y);
+         Y.pop_back();
+         if (((tmp_fy - current_fy) / g.adjList[e].wht) >= current_fy / B)
+            flag_y = true;
+         if (flag_x && flag_y)
          {
-            S.push_back(e);
-            double tmp_f = compute_valSet(nEvals, g, S);
-            S.pop_back();
-            if ((tmp_f - current_f) / g.adjList[e].wht >= alpha * current_f / B)
+            if ((tmp_fx - current_fx) > (tmp_fy - current_fy))
             {
-               S.push_back(e);
-               current_f = tmp_f;
-               cost += g.adjList[e].wht;
+               X.push_back(e);
+                current_fx = tmp_fx;
+            }
+            else
+            {
+               Y.push_back(e);
+               current_fy = tmp_fy;
+            }
+         }
+         else
+         {
+            if (flag_x)
+            {
+               X.push_back(e);
+               current_fx = tmp_fx;
+            }
+            if (flag_y)
+            {
+               Y.push_back(e);
+               current_fy = tmp_fy;
             }
          }
       }
-      return max(current_f, Emax);
+      vector<node_id> X2;
+      vector<node_id> Y2;
+      double tmpB = 0;
+      for (int i = X.size() - 1; i > 0; i--)
+      {
+         if (tmpB + g.adjList[X[i]].wht <= B)
+         {
+            X2.push_back(X[i]);
+            tmpB += g.adjList[X[i]].wht;
+         }
+         else
+            break;
+      }
+      tmpB = 0;
+      for (int i = Y.size() - 1; i > 0; i--)
+      {
+         if (tmpB + g.adjList[Y[i]].wht <= B)
+         {
+            Y2.push_back(Y[i]);
+            tmpB += g.adjList[Y[i]].wht;
+         }
+         else
+            break;
+      }
+      double fx = compute_valSet(nEvals, g, X2);
+      double fy = compute_valSet(nEvals, g, Y2);
+      solVal = max(max(fx, fy), Emax);
+      return solVal;
    }
-   void run()
+   double run()
    {
       nEvals = 0;
       double e2 = epsi / 20.0, solVal = 0;
@@ -218,6 +263,7 @@ public:
       vector<node_id> X, Y;
       double cost_x = 0, cost_y = 0, current_fx = 0, current_fy = 0, tmp_fx = 0.0, tmp_fy = 0, nguong = (tau * (1 - e2)) / (6 * B);
       theta = 19 * tau / (6 * e2 * B);
+      int l_x=0,l_x_max=log10(1/e2)/e2,l_y=0,l_y_max=log10(1/e2)/e2;
       while (theta > nguong)
       {
          while (true)
@@ -290,33 +336,43 @@ public:
                double delta = (tmp_fx - current_fx) / g.adjList[e].wht;
                if (delta >= theta)
                {
+                  if(l_y<=l_y_max && cost_y+g.adjList[e].wht > e2*B*pow(1+e2,l_y))
+                  {
+                     double tmpf2=0;
+                     while(true)
+                     {
+                        std::sort(A.begin(), A.end(), greater2());
+                        int index2 = -1;
+                        for (int i2 = 0; i2 < A.size(); i2++)
+                        {
+                           if (A[i2].check == false || cost_x + g.adjList[A[i2].u].wht > B) continue;
+                           index2 = i2;
+                           break;
+                        }
+                        if (index2 == -1) break;
+                        
+                        node_id e2 = A[index2].u;
+                        if (F_X[X.size()][e2] != -1)
+                        {
+                           tmpf2 = F_X[X.size()][e2];
+                           break;
+                        }
+                        else
+                        {
+                           X.push_back(e2);
+                           tmpf2 = compute_valSet(nEvals, g, X);
+                           X.pop_back();
+                           if(tmpf2-current_fx >= A[index2].w[2]/(1+e2))
+                              break;
+                        }
+                     }
+                     l_x++;
+                     solVal = max(tmpf2, solVal);
+                  }
                   X.push_back(e);
                   cost_x += g.adjList[e].wht;
                   current_fx = tmp_fx;
                   A[index1].check = false;
-                  std::sort(A.begin(), A.end(), greater2());
-                  int index2 = -1;
-                  for (int i2 = 0; i2 < A.size(); i2++)
-                  {
-                     if (A[i2].check == false || cost_x + g.adjList[A[i2].u].wht > B)
-                        continue;
-                     index2 = i2;
-                     break;
-                  }
-                  if (index2 != -1)
-                  {
-                     double tmpf;
-                     node_id e2 = A[index2].u;
-                     if (F_X[X.size()][e2] != -1)
-                        tmpf = F_X[X.size()][e2];
-                     else
-                     {
-                        X.push_back(e2);
-                        tmpf = compute_valSet(nEvals, g, X);
-                        X.pop_back();
-                     }
-                     solVal = max(tmpf, solVal);
-                  }
                }
                else
                {
@@ -329,33 +385,43 @@ public:
                double delta = (tmp_fy - current_fy) / g.adjList[e].wht;
                if (delta >= theta)
                {
+                  if(l_y<=l_y_max && cost_y+g.adjList[e].wht > e2*B*pow(1+e2,l_y))
+                  {
+                     double tmp_f2=0;
+                     while(true)
+                     {
+                        std::sort(A.begin(), A.end(), greater2());
+                        int index2 = -1;
+                        for (int i2 = 0; i2 < A.size(); i2++)
+                        {
+                           if (A[i2].check == false || cost_y + g.adjList[A[i2].u].wht > B)
+                              continue;
+                           index2 = i2;
+                           break;
+                        }
+                        if (index2 == -1) break;               
+                        node_id e2 = A[index2].u;
+                        if (F_Y[Y.size()][e2] != -1)
+                        {
+                           tmp_f2 = F_Y[Y.size()][e2];
+                           break;
+                        }
+                        else
+                        {
+                           Y.push_back(e2);
+                           tmp_f2 = compute_valSet(nEvals, g, Y);
+                           Y.pop_back();
+                           if(tmp_f2-current_fy >= A[index2].w[2]/(1+e2))
+                              break;
+                        }                                                  
+                     }
+                     l_y++;
+                     solVal = max(tmp_f2, solVal);
+                  }
                   Y.push_back(e);
                   cost_y += g.adjList[e].wht;
                   current_fy = tmp_fy;
                   A[index1].check = false;
-                  std::sort(A.begin(), A.end(), greater2());
-                  int index2 = -1;
-                  for (int i2 = 0; i2 < A.size(); i2++)
-                  {
-                     if (A[i2].check == false || cost_y + g.adjList[A[i2].u].wht > B)
-                        continue;
-                     index2 = i2;
-                     break;
-                  }
-                  if (index2 != -1)
-                  {
-                     double tmpf;
-                     node_id e2 = A[index2].u;
-                     if (F_Y[Y.size()][e2] != -1)
-                        tmpf = F_Y[Y.size()][e2];
-                     else
-                     {
-                        Y.push_back(e2);
-                        tmpf = compute_valSet(nEvals, g, Y);
-                        Y.pop_back();
-                     }
-                     solVal = max(tmpf, solVal);
-                  }
                }
                else
                {
@@ -368,6 +434,7 @@ public:
       }
       solVal = max(current_fx, max(current_fy, solVal));
       cout << "ALG3," << B << "," << solVal << "," << nEvals;
+      return solVal;
    }
 };
 
@@ -394,7 +461,6 @@ public:
    {
       uniform_real_distribution<double> dist(0.0, 1.0);
       vector<node_id> S;
-      vector<double> V1;
       double cost = 0, solVal = 0,B2 = B / 2, Emax = 0, current_f = 0, alpha = sqrt(2 + sqrt(2)), p = sqrt(2) - 1;
       for (node_id u = 0; u < g.n; u++)
       {
@@ -440,7 +506,7 @@ public:
       }
       return max(current_f, Emax);
    }
-   size_t run()
+   double run()
    {
       uniform_real_distribution<double> dist(0.0, 1.0);
       double solVal = 0, epsi2 = epsi / 10, delta;
@@ -452,8 +518,9 @@ public:
       }
       tau = alg2();
       solVal = tau;
-      theta = 16.037 * tau / (4 * epsi2 * B);
+      theta = 16.034 * tau / (4 * epsi2 * B);
       double nguong = (tau * (1 - epsi2)) / (4 * B), tmp_f = 0;
+      int l=0,l_max=log10(1/epsi2)/epsi2;
       while (theta >= nguong)
       {
          while (true)
@@ -491,31 +558,42 @@ public:
                double rand = dist(gen);
                if (rand >= 0.5)
                {
+                  if(l<=l_max && cost+g.adjList[e].wht > epsi2*B*pow(1+epsi2,l))
+                  {
+                     double tmp_f2=0;
+                     while(true)
+                     {
+                        std::sort(A.begin(), A.end(), greater2());
+                        int index2 = -1;
+                        for (int i2 = 0; i2 < A.size(); i2++)
+                        {
+                           if (A[i2].check == false || cost + g.adjList[A[i2].u].wht > B)
+                              continue;
+                           index2 = i2;
+                           break;
+                        }
+                        if (index2 == -1) break;
+                        node_id e2 = A[index2].u;
+                        if (FS[S.size()][e2] != -1)
+                        {
+                           tmp_f2 = FS[S.size()][e2];
+                           break;
+                        }
+                        else
+                        {
+                           S.push_back(e2);
+                           tmp_f2 = compute_valSet(nEvals, g, S);
+                           S.pop_back();
+                           if(tmp_f2-current_f >= A[index2].w[2]/(1+epsi2))
+                              break;
+                        }                                                 
+                     }
+                     solVal = max(tmp_f2, solVal);
+                     l++;
+                  }
                   current_f = tmp_f;
                   S.push_back(e);
                   cost += g.adjList[e].wht;
-                  std::sort(A.begin(), A.end(), greater2());
-                  int index2 = -1;
-                  for (int i2 = 0; i2 < A.size(); i2++)
-                  {
-                     if (A[i2].check == false || cost + g.adjList[A[i2].u].wht > B)
-                        continue;
-                     index2 = i2;
-                     break;
-                  }
-                  if (index2 != -1)
-                  {
-                     node_id e2 = A[index2].u;
-                     if (FS[S.size()][e2] != -1)
-                        tmp_f = FS[S.size()][e2];
-                     else
-                     {
-                        S.push_back(e2);
-                        tmp_f = compute_valSet(nEvals, g, S);
-                        S.pop_back();
-                     }
-                     solVal = max(tmp_f, solVal);
-                  }
                }
             }
             else
@@ -763,7 +841,7 @@ public:
       a.push_back(tmp);
       a.push_back(tmp);
       double k = g.n;
-      double e2 = epsi / 20;
+      double e2 = epsi / 14;
       for (int j = 1; j <= 2; j++)
       {
          if (j == 1)
