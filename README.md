@@ -5,7 +5,6 @@ for both `revmax`, `image` and `maxcut` applications are in `src/algs.cpp`.
 
 ### Dependencies
 - GNU `g++`, `make`
-- `python3` with `matplotlib` for plotting figures
 
 ### The source code is organized as follows:
 
@@ -18,15 +17,14 @@ for both `revmax`, `image` and `maxcut` applications are in `src/algs.cpp`.
 ### To run the source code, follow these steps:
 #### Step 1: Build the makefile by running "make" in the project directory.
 #### Step 2: Test the application using the following commands:
-
 - Image summarization:
 ./img -g data.bin -b B -a alg
 - Revenue Maximization:
 ./revmax_nm -g data.bin -b B -a alg
 - Maxcut:
 ./maxcut -g data.bin -b B -a alg
-Where:
-data.bin is the dataset.
-B is the budget as a percentage of total cost.
-alg is the algorithm to be used.
+##### Where:
+- data.bin is the dataset.
+- B is the budget as a percentage of total cost.
+- alg is the algorithm to be used.
 
